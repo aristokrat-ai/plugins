@@ -1,0 +1,7 @@
+{
+  "name": "aristokrat",
+  "version": "0.1.0",
+  "description": "Edit, check, save, publish, and restore exact Aristokrat page versions with the managed aristokrat CLI.",
+  "author": { "name": "Aristokrat" },
+  "license": "LicenseRef-Aristokrat-Proprietary"
+}

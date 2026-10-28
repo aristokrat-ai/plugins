@@ -1,0 +1,20 @@
+{
+  "name": "aristokrat",
+  "owner": {
+    "name": "Aristokrat"
+  },
+  "plugins": [
+    {
+      "name": "aristokrat",
+      "source": {
+        "source": "local",
+        "path": "./plugins/aristokrat"
+      },
+      "description": "Edit, check, save, publish, and restore exact Aristokrat page versions with the managed aristokrat CLI.",
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      }
+    }
+  ]
+}

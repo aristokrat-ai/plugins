@@ -1,0 +1,27 @@
+The runtime archive contains the unmodified official Node.js 26.3.1 executable
+and its LICENSE. Official archive digests are pinned in runtime-lock.json.
+
+Linux arm64 also contains the unmodified libatomic.so.1.2.0 binary from Debian
+libatomic1 12.2.0-14+deb12u1, stored as the regular file node/lib/libatomic.so.1.
+Only the private Node process uses this library path. No system package or
+library is installed or replaced.
+
+libatomic is Copyright Free Software Foundation, Inc. and licensed under
+GPL version 3 or later with GCC Runtime Library Exception version 3.1.
+The Debian copyright file includes the exception and attribution. The archive
+also includes the full GPL version 3 text from GCC 12.2.0 COPYING3.
+
+Binary and copyright package provenance:
+https://packages.debian.org/bookworm/arm64/libatomic1/download
+https://packages.debian.org/bookworm/arm64/gcc-12-base/download
+
+Debian corresponding source package:
+https://deb.debian.org/debian/pool/main/g/gcc-12/gcc-12_12.2.0-14+deb12u1.dsc
+https://deb.debian.org/debian/pool/main/g/gcc-12/gcc-12_12.2.0.orig.tar.gz
+https://deb.debian.org/debian/pool/main/g/gcc-12/gcc-12_12.2.0-14+deb12u1.debian.tar.xz
+
+GPL text provenance:
+https://raw.githubusercontent.com/gcc-mirror/gcc/releases/gcc-12.2.0/COPYING3
+SHA-256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
+
+These artifacts are for local validation. Public distribution remains gated.

@@ -1,0 +1,126 @@
+#!/bin/sh
+set -eu
+umask 077
+export LC_ALL=C
+
+fail() { printf '%s\n' "Aristokrat runtime: $*" >&2; exit 2; }
+base=$(CDPATH= cd -P -- "$(dirname -- "$0")/.." && pwd)
+manifest=$base/runtime-manifest.json
+index=$base/runtime-index.tsv
+[ -f "$manifest" ] && [ -f "$index" ] || fail 'build the local release before using this launcher'
+
+digest() {
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$1" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$1" | awk '{print $1}'
+  else
+    fail 'SHA-256 utility required (sha256sum or shasum)'
+  fi
+}
+
+expected_index=$(awk -F '"' '/^  "installer_index_sha256":/ {print $4}' "$manifest")
+[ "${#expected_index}" -eq 64 ] || fail 'invalid runtime manifest'
+[ "$(digest "$index")" = "$expected_index" ] || fail 'installer index checksum mismatch'
+tab=$(printf '\t')
+IFS="$tab" read -r schema release node_version cli_version mode origin < "$index"
+[ "$schema" = 'aristokrat-runtime-1' ] || fail 'unsupported runtime manifest'
+case "$release:$node_version:$cli_version" in *[!a-zA-Z0-9.:_-]*|'') fail 'invalid release identity';; esac
+case "$origin" in *[!a-zA-Z0-9.:/_-]*|*..*|*/./*|*/) fail 'invalid release origin';; esac
+case "$mode:$origin" in
+  https:https://*) protocols='=https'; max_redirs=3;;
+  loopback-fixture:http://127.0.0.1:*)
+    port=${origin#http://127.0.0.1:}; port=${port%%/*}
+    case "$port" in ''|*[!0-9]*) fail 'invalid loopback fixture port';; esac
+    [ "$port" -gt 0 ] && [ "$port" -le 65535 ] || fail 'invalid loopback fixture port'
+    protocols='=http'; max_redirs=0;;
+  *) fail 'release origin must use HTTPS or an explicit loopback fixture';;
+esac
+
+case "$(uname -s):$(uname -m)" in
+  Darwin:arm64) target=darwin-arm64;;
+  Linux:aarch64|Linux:arm64) target=linux-arm64;;
+  *) fail 'unsupported platform; this release includes only tested macOS arm64 and Linux glibc arm64 targets';;
+esac
+if [ "$target" = linux-arm64 ]; then
+  getconf GNU_LIBC_VERSION >/dev/null 2>&1 || fail 'Linux glibc is required; musl is unsupported'
+fi
+row=$(awk -F '\t' -v target="$target" '$1 == target {print; count++} END {if (count != 1) exit 1}' "$index") || fail 'target absent from release'
+IFS="$tab" read -r selected archive bytes sha node_path cli_path <<EOF
+$row
+EOF
+case "$archive:$node_path:$cli_path" in *[!a-zA-Z0-9./:_-]*|*..*|*/./*) fail 'invalid archive metadata';; esac
+case "$bytes" in ''|*[!0-9]*) fail 'invalid archive length';; esac
+case "$sha" in *[!0-9a-f]*) fail 'invalid archive checksum';; esac
+[ "${#sha}" -eq 64 ] && [ "$bytes" -gt 0 ] || fail 'invalid archive metadata'
+[ "$node_path" = node/bin/node ] && [ "$cli_path" = aristokrat/dist/cli.js ] || fail 'unsupported executable paths'
+
+if [ -n "${XDG_DATA_HOME:-}" ]; then
+  case "$XDG_DATA_HOME" in /*) data=$XDG_DATA_HOME;; *) fail 'XDG_DATA_HOME must be absolute';; esac
+else
+  case "${HOME:-}" in /*) data=$HOME/.local/share;; *) fail 'an absolute HOME or XDG_DATA_HOME is required';; esac
+fi
+parent=$data/aristokrat/runtimes
+mkdir -p "$parent"
+[ ! -L "$parent" ] || fail 'runtime directory must not be a symlink'
+key=$release-$target-$expected_index
+installed=$parent/$key
+receipt=$(printf '%s\n%s\n%s' "$expected_index" "$target" "$sha")
+complete() {
+  [ ! -L "$installed" ] && [ -d "$installed" ] && [ ! -L "$installed/receipt" ] &&
+    [ -f "$installed/receipt" ] && [ "$(cat "$installed/receipt")" = "$receipt" ] &&
+    [ -x "$installed/$node_path" ] && [ -f "$installed/$cli_path" ] &&
+    { [ "$target" != linux-arm64 ] || [ -f "$installed/node/lib/libatomic.so.1" ]; }
+}
+
+if ! complete; then
+  if [ -e "$installed" ] || [ -L "$installed" ]; then
+    complete || fail 'existing release is incomplete; move it aside before retrying'
+  else
+    stage=$(mktemp -d "$parent/.stage.XXXXXXXX")
+    cleanup() { rm -rf "$stage"; }
+    trap cleanup EXIT
+    trap 'exit 130' INT
+    trap 'exit 143' TERM HUP
+    printf '%s\n' "Aristokrat runtime: installing $release for $target" >&2
+    # HTTPS redirects are safe: the installed manifest pins the archive checksum.
+    curl -q --fail --silent --show-error --proto "$protocols" \
+      --location --max-redirs "$max_redirs" --proto-redir =https \
+      --connect-timeout 15 --max-time 300 "$origin/$archive" -o "$stage/archive" || fail 'download failed; retry the same command'
+    [ "$(wc -c < "$stage/archive" | tr -d ' ')" = "$bytes" ] || fail 'archive length mismatch'
+    [ "$(digest "$stage/archive")" = "$sha" ] || fail 'archive checksum mismatch'
+    tar -tzf "$stage/archive" > "$stage/names" || fail 'invalid archive'
+    awk '
+      $0 !~ /^runtime\/[a-zA-Z0-9_.\/-]*$/ || $0 ~ /(^|\/)\.\.?($|\/)/ || $0 ~ /\/\// {exit 1}
+      seen[$0]++ {exit 1}
+      END {if (NR == 0) exit 1}
+    ' "$stage/names" || fail 'unsafe archive paths'
+    tar -tvzf "$stage/archive" > "$stage/types" || fail 'invalid archive'
+    awk 'substr($0,1,1) != "-" && substr($0,1,1) != "d" {exit 1}' "$stage/types" || fail 'archive links and special files are forbidden'
+    mkdir "$stage/unpack"
+    tar -xzf "$stage/archive" -C "$stage/unpack" --no-same-owner --no-same-permissions || fail 'archive extraction failed'
+    [ -z "$(find "$stage/unpack" ! -type f ! -type d -print)" ] || fail 'unsafe extracted files'
+    payload=$stage/unpack/runtime
+    [ -f "$payload/$node_path" ] && [ -f "$payload/$cli_path" ] && \
+      [ -f "$payload/aristokrat/package.json" ] && [ -d "$payload/aristokrat/templates" ] && \
+      [ -f "$payload/node/LICENSE" ] && [ ! -e "$payload/receipt" ] || fail 'incomplete runtime archive'
+    chmod -R u=rwX,go= "$payload"
+    chmod u+x "$payload/$node_path"
+    if [ "$target" = linux-arm64 ]; then
+      [ -f "$payload/node/lib/libatomic.so.1" ] || fail 'missing private libatomic runtime'
+      export LD_LIBRARY_PATH="$payload/node/lib"
+    fi
+    [ "$("$payload/$node_path" --version)" = "v$node_version" ] || fail 'runtime version mismatch or incompatible OS'
+    printf '%s\n' "$receipt" > "$payload/receipt"
+    mv "$payload" "$stage/$key"
+    # The destination is the parent, so a competing nonempty release cannot nest or replace this one.
+    mv "$stage/$key" "$parent/" 2>/dev/null || complete || fail 'could not commit the runtime'
+    complete || fail 'installed release failed validation'
+    cleanup
+    trap - EXIT INT TERM HUP
+  fi
+fi
+if [ "$target" = linux-arm64 ]; then
+  export LD_LIBRARY_PATH="$installed/node/lib"
+fi
+exec "$installed/$node_path" "$installed/$cli_path" "$@"

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "plugin_version": "0.1.0",
+  "cli_version": "0.0.0",
+  "node_version": "26.3.1",
+  "api_protocol": 1,
+  "origin": "https://github.com/aristokrat-ai/plugins/releases/download/v0.1.0",
+  "origin_mode": "https",
+  "app_url": "https://app.aristokrat.ai",
+  "targets": {
+    "darwin-arm64": {
+      "archive": "aristokrat-0.1.0-darwin-arm64.tar.gz",
+      "bytes": 44024800,
+      "sha256": "64097138d1975e1cd62210893651f9184cb970eb9958c8ecc3bc48a75052bee3",
+      "node_path": "node/bin/node",
+      "cli_path": "aristokrat/dist/cli.js",
+      "official_node_archive": "node-v26.3.1-darwin-arm64.tar.gz",
+      "official_node_sha256": "3f624ab0d774553c0d28b968e141d8c676a35a2811fb0b7b356ba9cbdce15f74"
+    },
+    "linux-arm64": {
+      "archive": "aristokrat-0.1.0-linux-arm64.tar.gz",
+      "bytes": 48363237,
+      "sha256": "139caaa744eff0c4b7cc33d104841608630389b10956cad5523b2de37340c261",
+      "node_path": "node/bin/node",
+      "cli_path": "aristokrat/dist/cli.js",
+      "official_node_archive": "node-v26.3.1-linux-arm64.tar.gz",
+      "official_node_sha256": "2f0829b201e9db20996ae15bce62138df1e3d317775b005778b05cf7b19714f1",
+      "support_packages": [
+        {
+          "archive": "libatomic1_12.2.0-14+deb12u1_arm64.deb",
+          "url": "https://deb.debian.org/debian/pool/main/g/gcc-12/libatomic1_12.2.0-14+deb12u1_arm64.deb",
+          "sha256": "1693aa13ce2b30d061a519fc28b77b9bab8c8e45804ced5969d99821e1bc2159",
+          "member": "./usr/lib/aarch64-linux-gnu/libatomic.so.1.2.0",
+          "destination": "node/lib/libatomic.so.1"
+        },
+        {
+          "archive": "gcc-12-base_12.2.0-14+deb12u1_arm64.deb",
+          "url": "https://deb.debian.org/debian/pool/main/g/gcc-12/gcc-12-base_12.2.0-14+deb12u1_arm64.deb",
+          "sha256": "674cf6cba6d432bd200c45fe866c1652c7a53523cc2e7a613e05bc4abf7b5440",
+          "member": "./usr/share/doc/gcc-12-base/copyright",
+          "destination": "node/licenses/libatomic-copyright.txt"
+        }
+      ]
+    }
+  },
+  "installer_index_sha256": "fcc216c1918f2e358022a1aecbaa987fc6819c2a8405146c3507de69a8e26a04"
+}
