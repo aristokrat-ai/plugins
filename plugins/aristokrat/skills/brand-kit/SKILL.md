@@ -65,13 +65,15 @@ Skip:
 
 Pick at most 20, the most representative first: the order is the order builds see them. Prefer variety (people, scenes, objects, icons; cut-outs and full scenes) over many of one kind. Give each:
 
-- `alt`: what the image shows, plainly and factually, in a sentence ("Etching-style illustration of a woman in a ruff working on a laptop"). Required; pages use it as the image's alt text.
-- `tags`: a few short lowercase words for what kind of image it is and what is in it (`illustration`, `photo`, `pattern`, `icon`, `cut-out`, `scene`, `people`, `product`). At most 8.
+- `alt`: what the image shows, plainly and factually, in a sentence ("Etching-style illustration of a woman in a ruff working on a laptop"). Pages use it as the image's alt text, and page builders find images by it. Write it: you read the guide, so yours names what the brand calls things. An image you leave without one gets an alt from a vision model after the push.
+- `tags`: a few short lowercase words for what kind of image it is and what is in it. Start with its medium (`photo`, `illustration`, `screenshot`, `icon`, `chart`), then what it is for when one fits (`product`, `people`, `customer-logo`, `decoration`, `ad-creative`), then what is in it (`cut-out`, `scene`, `laptop`). Builders search these words, and generated tags use the same ones. At most 8. An image you leave without tags gets them from the vision model.
 - `"role": "og_image"` on one image only if the guide names a share or social image; that becomes the picture shown when a page is shared.
 
 ## Rules
 
 Write `rules` as concise markdown in the brand's own words, with a page citation on each point ("(p.12)"): tone of voice and example headlines, logo clear space, minimum size and misuse, the typography hierarchy, color distribution and accessible pairs, imagery style, and the guide's do's and don'ts.
+
+Give each part a `##` heading (`## Voice`, `## Logo`, `## Typography`, `## Color`, `## Imagery`). The app's Guidelines screen makes a section of each `##` heading and marks the Voice one as the section chat pages read; a `#` line is only the title.
 
 If the guide says how its images are made (AI prompts, photography direction, illustration style), copy that into an imagery part of the rules with page citations. Copy prompts word for word, typos included, in quotes, with the tool and step each belongs to ("Midjourney, step 1 (p.34): \"…\""), so the next image can be made the same way.
 
@@ -93,11 +95,11 @@ A folder (for example `brand-kit/<company>/`) with `brand.json` and the files it
               { "value": "Inter", "role": "font_body", "fallback": ["Helvetica Neue", "Arial", "sans-serif"] } ],
   "logos":  [ { "file": "logos/logo-light.svg", "role": "logo_light", "alt": "Acme" } ],
   "images": [ { "file": "images/founder-at-desk.webp", "alt": "Illustration of a woman at a desk with a laptop", "tags": ["illustration", "cut-out", "person"] } ],
-  "rules": "# Voice\n..."
+  "rules": "# Acme brand rules\n\n## Voice\n..."
 }
 ```
 
-`title` names the guide (it becomes the Brain's document source). Colors are `#rrggbb`. A font's `fallback` is at most 8 plain family names (letters, digits, spaces, dashes) and must end in a generic family (`serif`, `sans-serif`, `monospace`, `cursive`). `name` is optional and only when the guide names the color. Logo files are SVG, PNG, JPEG, WebP, AVIF or GIF, 5 MB at most; image files PNG, JPEG, WebP, AVIF or GIF, 5 MB at most, 20 images at most; font files WOFF2.
+`title` names the guide (it becomes the Brain's document source). Colors are `#rrggbb`. A font's `fallback` is at most 8 plain family names (letters, digits, spaces, dashes) and must end in a generic family (`serif`, `sans-serif`, `monospace`, `cursive`). `name` is optional and only when the guide names the color. Logo files are SVG, PNG, JPEG, WebP, AVIF or GIF, 5 MB at most; image files PNG, JPEG, WebP, AVIF or GIF, 5 MB at most; font files WOFF2.
 
 ## Show the marketer before pushing
 
@@ -109,4 +111,6 @@ Show the kit for a yes before anything is sent: each color with its role (and wh
 "<launcher>" brand push brand-kit/<company> --company <company> --json
 ```
 
-Push refuses a kit naming a missing file or a file outside the folder before uploading anything. The server answers 422 with each problem (`colors[0].value`, `role` given twice, a file it does not hold, an image without `alt`, more than 20 images) and writes nothing; fix the kit and push again. Pushing the same kit again changes nothing. Report the roles now held, the counts written and archived (colors, fonts, logos, images), and whether the rules became a Brain source. Then delete the scratch folder.
+Push refuses a kit naming a missing file or a file outside the folder before uploading anything. The server answers 422 with each problem (`colors[0].value`, `role` given twice, a file it does not hold) and writes nothing; fix the kit and push again. Pushing the same kit again changes nothing. Report the color, font and logo roles now held (the answer leaves out image roles, so name the share image yourself if the kit gave one), the counts written and archived (colors, fonts, logos, images), and whether the rules became a Brain source. Then delete the scratch folder.
+
+To add or remove a few images later without pushing the whole kit again, use the `brand-images` skill.
