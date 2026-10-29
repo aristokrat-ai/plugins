@@ -1,3 +1,3 @@
-aristokrat-runtime-1	0.2.0	26.3.1	0.0.0	https	https://github.com/aristokrat-ai/plugins/releases/download/v0.2.0
-darwin-arm64	aristokrat-0.2.0-darwin-arm64.tar.gz	44026880	8adfc41f7f88a0b2fee1bd65a39f3aeb0aed37ae4c49449c53a86193551f68e9	node/bin/node	aristokrat/dist/cli.js
-linux-arm64	aristokrat-0.2.0-linux-arm64.tar.gz	48371641	119afbfb1b6cfd95b4cbb0fa85f2bb62b580013ab04834aa77afdbe49da18155	node/bin/node	aristokrat/dist/cli.js
+aristokrat-runtime-1	0.2.1	26.3.1	0.2.1	https	https://github.com/aristokrat-ai/plugins/releases/download/v0.2.1
+darwin-arm64	aristokrat-0.2.1-darwin-arm64.tar.gz	44026892	8afbd1a28c0c99c457e976c303246bcdb42133a3dc72a59f11556912a274080c	node/bin/node	aristokrat/dist/cli.js
+linux-arm64	aristokrat-0.2.1-linux-arm64.tar.gz	48371641	e45457be6de0d8e0e0b9f43d676ce75967000693643e5f2e4bf4084cb927bb54	node/bin/node	aristokrat/dist/cli.js
