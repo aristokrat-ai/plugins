@@ -1,6 +1,6 @@
 ---
 name: aristokrat
-description: Find and edit Aristokrat landing pages, preview and check changes, save exact versions, and publish or restore only when requested.
+description: Find, create and edit Aristokrat landing pages, preview and check changes, save exact versions, and publish or restore only when requested.
 ---
 
 Use the plugin's managed CLI. Resolve `../../scripts/aristokrat` from this skill directory to an absolute path. Quote that path on every invocation. The launcher installs its pinned private runtime on first use. Do not use a global `aristokrat`, install Node, or clone the application repository. Codex resolves this path from the installed SKILL.md location. Claude Code can also resolve it from `${CLAUDE_PLUGIN_ROOT}/scripts/aristokrat`. Do not assume Claude's variable exists in Codex.
@@ -16,6 +16,13 @@ Use `pages --json` to discover pages and check authentication through its struct
 List pages before choosing. Match company and full page path. If the request matches multiple pages or companies, present the choices and end your final answer with a direct question ending in "?" asking which company and full page path to select. Do not edit or publish a guessed page. Pull the selected page into a dedicated writable folder and read its AGENTS.md. Use explicit `--dir` on subsequent commands.
 
 When listing or describing pages, describe `live_version` as "published (version N)", never "live" unless a publication result with `state == "published"` for that page was observed in this session. `pages` and `versions` do not establish live delivery. Use `history` or the publication result before making a live claim. Every affirmative sentence saying a page is live must contain a host URL from that result verbatim in that same sentence. Name only that result's version, and do not call anything live otherwise. Pronoun-only claims such as "It is now live" are forbidden. A later result for the same page in any other state supersedes it; do not reuse the earlier result.
+
+## Create a page
+
+`new <company> <path> --json` creates a landing page with no version and pulls a starter folder with the company's approved shell and brand tokens. The first `push` saves v1.
+
+- `<company>`: the company's slug, as listed by `pages --json`.
+- `<path>`: the public URL path of this landing page on the company's domain, and its name in Aristokrat. Visitors, ad platforms and search engines all see it, so treat it as part of the page's SEO and ad message. Use the path the user names; otherwise choose a short, readable path that describes the page's topic or offer, using the words its audience would search for. Format: starts with `/`, then lowercase segments of letters, digits and hyphens, such as `/demo` or `/legal/ai-audit`. Reserved: no segment can be `assets`. Taken paths: it must be unused in that company, including by unpublished pages. A taken path is refused, so choose another rather than editing the existing page.
 
 ## Edit, preview, check, and save
 

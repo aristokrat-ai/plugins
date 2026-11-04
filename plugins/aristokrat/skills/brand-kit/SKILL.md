@@ -3,7 +3,7 @@ name: brand-kit
 description: Turn a brand guidelines PDF of any size into an Aristokrat brand kit (colors, fonts, logos, images and written rules) on this machine, show it to the marketer, and push it to the company's brand library with the managed aristokrat CLI.
 ---
 
-Use this when a marketer gives you brand guidelines (a PDF brand book, often tens of MB of slides) and wants Aristokrat's pages to use the brand. Aristokrat cannot take the PDF itself. You read it here and write a small brand kit folder; `aristokrat brand push` uploads the kit's files and writes the brand library. Pages built afterwards use the kit's colors, fonts, logos and images, and the Brain learns the written rules.
+Use this when a marketer gives you brand guidelines (a PDF brand book, often tens of MB of slides) and wants Aristokrat's pages to use the brand. Aristokrat cannot take the PDF itself. You read it here and write a small brand kit folder; `aristokrat brand push` uploads the kit's files and writes the brand library. Pages built afterwards use the kit's colors, fonts, logos and images, and the Brain learns the written rules. Pages that already exist each get a checked brand update with the kit's colors, fonts and logos; it is saved, not published, so the marketer publishes each page when they want it live.
 
 Use the plugin's managed CLI exactly as the `aristokrat` skill says: resolve `../../scripts/aristokrat` from this skill directory to an absolute path and quote it on every invocation (Claude Code can also use `${CLAUDE_PLUGIN_ROOT}/scripts/aristokrat`). Sign in the way that skill describes. Never inspect credentials or tokens.
 

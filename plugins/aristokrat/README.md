@@ -25,6 +25,6 @@ After source changes, Ctrl-C the artifact server and rerun `install`; changed so
 
 For a T3 provider configured with a custom home, run the corresponding install with that exact home, for example `CODEX_HOME=/absolute/custom/home bin/aristokrat-plugin install --host codex` or `CLAUDE_CONFIG_DIR=/absolute/custom/home bin/aristokrat-plugin install --host claude`. Use the same environment when uninstalling. Custom provider homes are not automatically discovered.
 
-Local W5 is [closed with accepted limits](../../docs/plans/aristokrat-marketer-plugin/w5.md#accepted-closure). Genuine Claude inference remains unverified, and full CI still fails on the packaged-shell test. Public distribution follows the [production plan (PL1–PL8)](../../docs/plans/going-to-prod/plan.md#marketer-plugin).
+Local W5 is [closed with accepted limits](../../docs/plans/aristokrat-marketer-plugin/w5.md#accepted-closure). Genuine Claude inference remains unverified. Public distribution follows the [production plan (PL1–PL8)](../../docs/plans/going-to-prod/plan.md#marketer-plugin).
 
 See the [release builder](../../tools/aristokrat-release/README.md) for packaging proofs and [developer setup](../../README.md#start-development) for the local stack.

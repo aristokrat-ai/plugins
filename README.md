@@ -1,11 +1,11 @@
 # Aristokrat plugins
 
-The Aristokrat plugin lets Claude Code, Codex and T3 Code work on your Aristokrat landing pages and brand kit at [app.aristokrat.ai](https://app.aristokrat.ai). Ask your agent to change a page, preview it, check it, save it, publish an exact version or restore an earlier one. Give it your brand guidelines PDF and it builds a brand kit and uploads it to your company.
+The Aristokrat plugin lets Claude Code, Claude Desktop, Codex and T3 Code work on your Aristokrat landing pages and brand kit at [app.aristokrat.ai](https://app.aristokrat.ai). Ask your agent to change a page, preview it, check it, save it, publish an exact version or restore an earlier one. Give it your brand guidelines PDF and it builds a brand kit and uploads it to your company.
 
 ## What you need
 
 - A Mac with Apple silicon (M1 or later). Intel Macs and Windows are not supported yet.
-- Claude Code, Codex or T3 Code, already signed in.
+- Claude Code, Claude Desktop, Codex or T3 Code, already signed in. Claude Desktop also needs the `claude` command in Terminal to install the plugin.
 - An Aristokrat account on [app.aristokrat.ai](https://app.aristokrat.ai).
 - Git. If your Mac does not have it, the first command below asks to install Apple's Command Line Tools. Accept, then run the command again.
 
@@ -30,6 +30,8 @@ codex plugin add aristokrat@aristokrat
 ```
 
 T3 Code uses the Claude Code and Codex installs above. Install for the provider you pick in T3 (or both), then start a new thread.
+
+Claude Desktop works in its Code tab, which runs Claude Code and reads the same plugins. Run the Claude Code lines above in Terminal, then start a new session in the Code tab. Update and remove it with the Claude Code lines below. Desktop chat and Cowork are not supported yet.
 
 ## First use
 
