@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
-  "plugin_version": "0.3.0",
-  "cli_version": "0.3.0",
+  "plugin_version": "0.3.1",
+  "cli_version": "0.3.1",
   "node_version": "26.3.1",
   "api_protocol": 1,
-  "origin": "https://github.com/aristokrat-ai/plugins/releases/download/v0.3.0",
+  "origin": "https://github.com/aristokrat-ai/plugins/releases/download/v0.3.1",
   "origin_mode": "https",
   "app_url": "https://app.aristokrat.ai",
   "targets": {
     "darwin-arm64": {
-      "archive": "aristokrat-0.3.0-darwin-arm64.tar.gz",
-      "bytes": 44029203,
-      "sha256": "85ae426e8d37692d170220e2b2a6f1ad632a46b15211dbbf1c558376b1f89f5f",
+      "archive": "aristokrat-0.3.1-darwin-arm64.tar.gz",
+      "bytes": 44030439,
+      "sha256": "2334d392e280641e9646e8f65092b65b924dd7f8989bf06d72a092b20c0628de",
       "node_path": "node/bin/node",
       "cli_path": "aristokrat/dist/cli.js",
       "official_node_archive": "node-v26.3.1-darwin-arm64.tar.gz",
       "official_node_sha256": "3f624ab0d774553c0d28b968e141d8c676a35a2811fb0b7b356ba9cbdce15f74"
     },
     "linux-arm64": {
-      "archive": "aristokrat-0.3.0-linux-arm64.tar.gz",
-      "bytes": 48372952,
-      "sha256": "c6f09a5fa443592df6666bedac67d65ac0c535764eb2e4e098725184992e1ddc",
+      "archive": "aristokrat-0.3.1-linux-arm64.tar.gz",
+      "bytes": 48372846,
+      "sha256": "2ef1235890d3a76578133e6f40db70daa3c8e01d6ac52675da5bf69ec569b793",
       "node_path": "node/bin/node",
       "cli_path": "aristokrat/dist/cli.js",
       "official_node_archive": "node-v26.3.1-linux-arm64.tar.gz",
@@ -43,5 +43,5 @@
       ]
     }
   },
-  "installer_index_sha256": "7122b679855dbbe3cd3a663333facc3c51f6107be45ecf2305fc7893e5d6f0ce"
+  "installer_index_sha256": "f4412f769a1a64d2fbefb39f84cde93480ede63170104fedf44d99d51db6a0c4"
 }
